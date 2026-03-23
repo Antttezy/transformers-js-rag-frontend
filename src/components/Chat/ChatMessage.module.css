@@ -1,0 +1,16 @@
+.message {
+    padding: 10px 14px;
+    border-radius: 12px;
+    max-width: 70%;
+    word-break: break-word;
+}
+
+.user {
+    background-color: var(--user-msg-bg);
+    align-self: flex-end;
+}
+
+.bot {
+    background-color: var(--bot-msg-bg);
+    align-self: flex-start;
+}
