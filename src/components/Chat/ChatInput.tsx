@@ -3,13 +3,14 @@ import styles from './ChatInput.module.css';
 
 type Props = {
     onSend: (text: string) => void;
+    enabled: boolean
 };
 
-export default function ChatInput({ onSend }: Props) {
+export default function ChatInput({ onSend, enabled }: Props) {
     const [text, setText] = useState('');
 
     const handleSend = () => {
-        if (!text.trim())
+        if (!text.trim() || !enabled)
             return;
 
         onSend(text.trim());
@@ -33,7 +34,7 @@ export default function ChatInput({ onSend }: Props) {
                 rows={1}
                 placeholder="Введите сообщение..."
             />
-            <button className={styles.button} onClick={handleSend}>
+            <button className={styles.button} onClick={handleSend} disabled={!enabled}>
                 Отправить
             </button>
         </div>

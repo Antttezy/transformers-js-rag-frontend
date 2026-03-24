@@ -1,4 +1,4 @@
-import { pipeline } from "@huggingface/transformers";
+import { TextGenerationPipeline } from "@huggingface/transformers";
 import { type QueryFormatter } from './types';
 
 
@@ -7,8 +7,7 @@ type Queries = {
 }
 
 export class TransformersQueryFormatter implements QueryFormatter {
-    private generator: any; /* eslint-disable-line @typescript-eslint/no-explicit-any */
-    private loading: Promise<void>;
+    private pipeline: TextGenerationPipeline;
     private systemPrompt = `Ты — система переписывания поисковых запросов для векторной базы данных (RAG).
 
 Твоя задача:
@@ -35,33 +34,23 @@ export class TransformersQueryFormatter implements QueryFormatter {
 - каждый запрос должен быть самодостаточным
 - язык запроса должен совпадать с языком пользователя`;
 
-    constructor() {
-        this.loading = this.init();
-    }
-
-    private async init() {
-        this.generator = await pipeline('text-generation', 'onnx-community/Qwen3-4B-ONNX', {
-            device: 'webgpu'
-        } as any /* eslint-disable-line @typescript-eslint/no-explicit-any */
-        );
+    constructor(pipeline: TextGenerationPipeline) {
+        this.pipeline = pipeline
     }
 
     async formatQuery(query: string): Promise<string[]> {
-        // Ждём инициализации
-        await this.loading;
-
         const messages = [
             { role: "system", content: this.systemPrompt },
             { role: "user", content: `Вопрос пользователя:\n${query}` }
         ];
 
-        const output = await this.generator(messages, {
+        const output = (await this.pipeline(messages, {
             max_new_tokens: 512,
             do_sample: false
-        });
+        })) as any; /* eslint-disable-line @typescript-eslint/no-explicit-any */
 
-        const response = output[0].generated_text.at(-1).content;
-        console.log("Intermediate response", response)
+        const response = (output[0].generated_text.at(-1).content) as string;
+        console.log("TransformersQueryFormatter", "Intermediate response", response)
         return this.extractQueries(response)
     }
 

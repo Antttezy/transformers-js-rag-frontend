@@ -6,11 +6,11 @@ type ChatClient = {
     sendMessage: (query: string) => Promise<string>
 }
 
-export function useChat(chatClient: ChatClient) {
+export function useChat(chatClient: ChatClient | null) {
     const [messages, setMessages] = useState<Message[]>([]);
 
     const sendMessage = async (text: string) => {
-        if (!text.trim()) return;
+        if (!text.trim() || !chatClient) return;
 
         const userMsg: Message = { text, role: 'user' };
         setMessages(prev => [...prev, userMsg]);

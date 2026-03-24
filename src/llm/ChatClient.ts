@@ -12,7 +12,11 @@ export class ChatClient implements ChatClientType {
     }
 
     async sendMessage(query: string): Promise<string> {
+        console.log("ChatClient", "query", query)
+
         const formatted = await this.queryFormatter.formatQuery(query);
+        console.log("ChatClient", "formatted", formatted)
+
         const documents: string[] = []
 
         for (let i = 0; i < formatted.length; i++) {
@@ -20,6 +24,8 @@ export class ChatClient implements ChatClientType {
             const docs = await this.documentSearch.search(request);
             documents.push(...docs)
         }
+
+        console.log("ChatClient", "documents", documents)
 
         const response = await this.responseGenerator.getResponse(query, documents);
         return response;
