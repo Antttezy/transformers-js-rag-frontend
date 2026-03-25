@@ -5,7 +5,7 @@ export function useDocumentSearch() {
     const url = import.meta.env.VITE_APP_DOCUMENT_SEARCH_BACKEND_URL as (string | undefined)
     
     return useMemo(() => {
-        if (!url) return null
+        if (url == null) return null
 
         return new DocumentSearchAPI(url)
     }, [url])
