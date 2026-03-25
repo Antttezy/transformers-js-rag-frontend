@@ -15,9 +15,15 @@ export function useChat(chatClient: ChatClient | null) {
         const userMsg: Message = { text, role: 'user' };
         setMessages(prev => [...prev, userMsg]);
 
-        const responseText = await chatClient.sendMessage(text);
-        const botMsg: Message = { text: responseText, role: 'bot' };
-        setMessages(prev => [...prev, botMsg]);
+        try {
+            const responseText = await chatClient.sendMessage(text);
+            const botMsg: Message = { text: responseText, role: 'bot' };
+            setMessages(prev => [...prev, botMsg]);
+        } catch (e: any) {
+            const errMsg: Message = { text: e.message, role: 'error' }
+            setMessages(prev => [...prev, errMsg])
+            throw e
+        }
     };
 
     return { messages, sendMessage };

@@ -1,4 +1,4 @@
 export type Message = {
     text: string;
-    role: 'user' | 'bot';
+    role: 'user' | 'bot' | 'error';
 };
