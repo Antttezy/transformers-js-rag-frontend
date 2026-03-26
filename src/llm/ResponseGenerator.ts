@@ -36,6 +36,10 @@ export class TransformersResponseGenerator implements ResponseGenerator {
             systemPrompt += `\n[ИСТОЧНИК ${n}]\n${doc}\n`
         }
 
+        if (documents.length == 0) {
+            systemPrompt += `\nНЕ НАЙДЕНО НИ ОДНОГО ИСТОЧНИКА`
+        }
+
         console.log("TransformersResponseGenerator", "systemPrompt", systemPrompt)
 
         const messages = [
