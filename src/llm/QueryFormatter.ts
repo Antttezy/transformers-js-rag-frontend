@@ -19,7 +19,9 @@ export class TransformersQueryFormatter implements QueryFormatter {
 - Используй простой и точный язык
 - Убирай лишние слова
 - Добавляй ключевые термины, если это улучшает поиск
+- Добавляй в список простые ключевые слова
 - Если вопрос сложный или многокомпонентный — разбей его на несколько запросов
+- Каждый запрос дожен содержать 1-2 слова. Если получается больше - разбей на несколько запросов
 - Если достаточно одного запроса — верни один
 
 Формат ответа:
@@ -45,7 +47,7 @@ export class TransformersQueryFormatter implements QueryFormatter {
         ];
 
         const output = (await this.pipeline(messages, {
-            max_new_tokens: 512,
+            max_new_tokens: 1024,
             do_sample: false
         })) as any; /* eslint-disable-line @typescript-eslint/no-explicit-any */
 
